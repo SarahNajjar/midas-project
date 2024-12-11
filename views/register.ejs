@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e2f;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+        }
+
+        .register-container {
+            background-color: #292942;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            width: 400px;
+            text-align: center;
+        }
+
+        .register-container h2 {
+            color: #6ab1d7;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #bbb;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border: 1px solid #6ab1d7;
+            box-shadow: 0 0 5px #6ab1d7;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            font-size: 16px;
+            background-color: #6ab1d7;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #518bad;
+        }
+
+        .text-center {
+            margin-top: 10px;
+        }
+
+        .text-center a {
+            color: #6ab1d7;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .text-center a:hover {
+            text-decoration: underline;
+        }
+
+        .success-message {
+            color: #6ab1d7;
+            margin-bottom: 10px;
+        }
+
+        .error-message {
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="register-container">
+        <h2>Create an Account</h2>
+        <% if (typeof success !=='undefined' ) { %>
+            <p class="success-message">
+                <%= success %>
+            </p>
+            <% } %>
+                <% if (typeof error !=='undefined' ) { %>
+                    <p class="error-message">
+                        <%= error %>
+                    </p>
+                    <% } %>
+                        <form action="/api/users/register" method="post">
+                            <div class="form-group">
+                                <label for="first_name">First Name</label>
+                                <input type="text" id="first_name" name="first_name" placeholder="Enter your first name"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last_name">Last Name</label>
+                                <input type="text" id="last_name" name="last_name" placeholder="Enter your last name"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" id="username" name="username" placeholder="Enter your username"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" placeholder="Enter your password"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="type">Type</label>
+                                <select id="type" name="type" required>
+                                    <option value="">-- Select Type --</option>
+                                    <option value="student">Student</option>
+                                    <option value="instructor">Instructor</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn">Register</button>
+                        </form>
+                        <p class="text-center">
+                            Already have an account? <a href="/login">Login here</a>
+                        </p>
+    </div>
+</body>
+
+</html>

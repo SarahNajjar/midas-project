@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #1c1f3a;
+            /* Dark background */
+            color: #eaeaea;
+            /* Light text color */
+            width: 100%;
+            height: 100%;
+        }
+
+        .profile-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .profile-header {
+            width: 100%;
+            background-color: #2c3e50;
+            /* Darker background for header */
+            padding: 20px 30px;
+            text-align: center;
+            border-bottom: 2px solid #00bfff;
+            /* Bright blue border for contrast */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .profile-header h1 {
+            margin: 0;
+            color: #00bfff;
+            /* Bright blue text */
+            font-size: 2rem;
+        }
+
+        .profile-content {
+            flex: 1;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+            box-sizing: border-box;
+            background-color: #2c3e50;
+            /* Container background */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px 15px;
+            border-bottom: 1px solid #3e4a6d;
+            /* Table row border color */
+        }
+
+        th {
+            color: #00bfff;
+            /* Bright blue for headers */
+            font-weight: bold;
+        }
+
+        td {
+            color: #d0e7ff;
+            /* Light blue for data */
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #ffffff;
+            background-color: #3e8ed0;
+            /* Medium blue button */
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #1a6ea6;
+            /* Darker blue on hover */
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            background-color: #0056b3;
+            /* Dark blue on active */
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="profile-container">
+        <!-- Header -->
+        <div class="profile-header">
+            <h1>User Profile</h1>
+        </div>
+
+        <!-- Content -->
+        <div class="profile-content">
+            <table>
+                <tr>
+                    <th>User ID:</th>
+                    <td>
+                        <%= user.id %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Username:</th>
+                    <td>
+                        <%= user.username %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                    <td>
+                        <%= user.email %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>First Name:</th>
+                    <td>
+                        <%= user.first_name %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Last Name:</th>
+                    <td>
+                        <%= user.last_name %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Account Type:</th>
+                    <td>
+                        <%= user.type %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Created At:</th>
+                    <td>
+                        <%= user.created_at %>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Updated At:</th>
+                    <td>
+                        <%= user.updated_at || 'N/A' %>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="btn-container">
+                <a href="/" class="btn">Back to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
