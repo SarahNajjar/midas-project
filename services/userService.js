@@ -60,19 +60,34 @@ class UserService {
 
     // Updates an existing user's information by their ID.
     async updateUser(id, userData) {
-        const { username, password, email, first_name, last_name, type } = userData;
-        const [result] = await this.pool.query(
+        const { username, email, first_name, last_name, type, password } = userData;
+
+        // Fetch the current password if no new password is provided
+        let userPasswordHash = password;
+        if (!password) {
+            const [user] = await this.pool.query('SELECT user_password_hash FROM users WHERE user_id = ?', [id]);
+            if (user.length > 0) {
+                userPasswordHash = user[0].user_password_hash;
+            } else {
+                throw new Error('User not found.');
+            }
+        }
+
+        const result = await this.pool.query(
             'UPDATE users SET user_username = ?, user_password_hash = ?, user_email = ?, user_first_name = ?, user_last_name = ?, user_type = ?, user_updated_at = NOW() WHERE user_id = ?',
-            [username, password, email, first_name, last_name, type, id]
+            [username, userPasswordHash, email, first_name, last_name, type, id]
         );
-        return result.affectedRows > 0;
+
+        return result[0].affectedRows > 0; // Return true if the update was successful
     }
+
 
     // Deletes a user from the database by their ID.
     async deleteUser(id) {
-        const result = await this.pool.query('DELETE FROM users WHERE user_id = ?', [id]);
-        return result.affectedRows > 0;
+        const result = await this.pool.query('DELETE FROM users WHERE user_id = ?', [id]); // Ensure the column and table names match your DB schema
+        return result[0].affectedRows > 0; // Check if a row was affected
     }
+
 
     async loginUser(email, password) {
         try {
@@ -103,6 +118,18 @@ class UserService {
             throw new Error('An error occurred during the login process.');
         }
     }
+    async searchUsers(searchTerm) {
+        const query = `
+            SELECT * FROM users
+            WHERE user_first_name LIKE ? OR user_last_name LIKE ?
+        `;
+        const searchPattern = `${searchTerm}%`; // Match names starting with the search term
+        const [rows] = await this.pool.query(query, [searchPattern, searchPattern]);
+        return rows; // Return the filtered users
+    }
+
+
+
 }
 
 module.exports = new UserService();

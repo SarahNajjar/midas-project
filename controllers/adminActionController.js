@@ -6,7 +6,7 @@ const adminActionService = require('../services/adminActionService');
 // Define the AdminActionController class to manage admin actions.
 class AdminActionController {
 
-    
+
     // Retrieves all admin actions. 
     async getAdminActions(req, res) {
         try {
@@ -18,7 +18,7 @@ class AdminActionController {
         }
     }
 
-    
+
     // Creates a new admin action.
     async createAdminAction(req, res) {
         try {
@@ -31,7 +31,7 @@ class AdminActionController {
         }
     }
 
-    
+
     // Updates an existing admin action by ID.
     async updateAdminAction(req, res) {
         try {
@@ -44,7 +44,7 @@ class AdminActionController {
         }
     }
 
-    
+
     // Deletes an admin action by ID.
     async deleteAdminAction(req, res) {
         try {

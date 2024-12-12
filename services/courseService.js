@@ -15,10 +15,20 @@ class CourseService {
     }
 
     // Fetches all courses from the database.
-    async getCourses() {
-        const [rows] = await this.pool.query('SELECT * FROM courses');
+    async getCourses(search) {
+        let query = 'SELECT * FROM courses';
+        const params = [];
+
+        if (search) {
+            query += ' WHERE course_name LIKE ? OR course_instrument LIKE ?';
+            const searchTerm = `%${search}%`; // Add wildcard for partial matching
+            params.push(searchTerm, searchTerm);
+        }
+
+        const [rows] = await this.pool.query(query, params);
         return rows.map(Course.fromRow);
     }
+
 
     // Fetches a course by its ID.
     async getCourseById(courseId) {
@@ -56,9 +66,10 @@ class CourseService {
 
     // Deletes a course by its ID.
     async deleteCourse(courseId) {
-        const result = await this.pool.query('DELETE FROM courses WHERE course_id = ?', [courseId]);
+        const [result] = await this.pool.query('DELETE FROM courses WHERE course_id = ?', [courseId]);
         return result.affectedRows > 0;
     }
+
 }
 
 module.exports = new CourseService();

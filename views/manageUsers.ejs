@@ -78,42 +78,52 @@
             background: #36a567;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        .user-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
             margin-top: 20px;
         }
 
-        table th,
-        table td {
-            padding: 10px;
-            text-align: left;
+        .user-card {
+            background: #2c2f33;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        table th {
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+        }
+
+        .user-initial {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 10px;
+            border-radius: 50%;
             background: #7289da;
             color: #ffffff;
-            border-bottom: 2px solid #2c2f33;
-        }
-
-        table tr {
-            border-bottom: 1px solid #40444b;
-        }
-
-        table tr:nth-child(even) {
-            background: #2c2f33;
-        }
-
-        table tr:hover {
-            background: #40444b;
-        }
-
-        .actions {
+            font-size: 24px;
             display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-info {
+            margin-bottom: 15px;
+        }
+
+        .user-actions {
+            display: flex;
+            justify-content: center;
             gap: 10px;
         }
 
-        .actions a {
+        .user-actions a {
             padding: 8px 12px;
             text-decoration: none;
             border-radius: 5px;
@@ -122,15 +132,15 @@
             text-align: center;
         }
 
-        .actions .edit {
+        .user-actions .edit {
             background: #686663;
         }
 
-        .actions .delete {
+        .user-actions .delete {
             background: #e74c3c;
         }
 
-        .actions a:hover {
+        .user-actions a:hover {
             opacity: 0.8;
         }
     </style>
@@ -142,42 +152,60 @@
 
         <div class="toolbar">
             <div class="search-bar">
-                <input type="text" placeholder="Search users by name or email">
-                <button>Search</button>
+                <form action="/api/users/manageUsers" method="GET" style="display: flex;">
+                    <input type="text" name="search" placeholder="Search users by first or last name"
+                        value="<%= typeof search !== 'undefined' ? search : '' %>" required>
+                    <button type="submit">Search</button>
+                </form>
             </div>
+
             <div class="add-user">
-                <a href="/register">Add New User</a>
+                <a href="/api/users/addUser">Add New User</a>
             </div>
         </div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% users.forEach(user => { %>
-                <tr>
-                    <td><%= user.id %></td>
-                    <td><%= user.username %></td>
-                    <td><%= user.first_name %> <%= user.last_name %></td>
-                    <td><%= user.email %></td>
-                    <td><%= user.type %></td>
-                    <td class="actions">
-                        <a href="/api/users/edit-form/<%= user.id %>" class="edit">Edit</a>
-                        <a href="/api/users/delete/<%= user.id %>" class="delete">Delete</a>
-                    </td>
-                </tr>
-                <% }) %>
-            </tbody>
-        </table>
+        <div class="user-grid">
+            <% if (users.length===0) { %>
+                <p style="text-align: center; color: #ff7675;">No users found for "<%= search %>".</p>
+                <% } else { %>
+                    <% users.forEach(user=> { %>
+                        <div class="user-card">
+                            <div class="user-initial">
+                                <%= user.user_first_name ? user.user_first_name.charAt(0).toUpperCase() : '?' %>
+                            </div>
+                            <div class="user-info">
+                                <h3>
+                                    <%= user.user_first_name || 'Unknown' %>
+                                        <%= user.user_last_name || '' %>
+                                </h3>
+                                <p>
+                                    <%= user.user_email || 'No email provided' %>
+                                </p>
+                                <p><strong>Role:</strong>
+                                    <%= user.user_type || 'N/A' %>
+                                </p>
+                            </div>
+                            <div class="user-actions">
+                                <a href="/api/users/edit-form/<%= user.user_id %>" class="edit">Edit</a>
+                                <a href="/api/users/delete/<%= user.user_id %>" class="delete">Delete</a>
+                            </div>
+                        </div>
+                        <% }); %>
+                            <% } %>
+        </div>
+
+
     </div>
 </body>
+<script>
+    document.querySelectorAll('.delete').forEach(deleteButton => {
+        deleteButton.addEventListener('click', function (event) {
+            const confirmed = confirm('Are you sure you want to delete this user?');
+            if (!confirmed) {
+                event.preventDefault(); // Prevent the link from being followed
+            }
+        });
+    });
+</script>
 
 </html>

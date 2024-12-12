@@ -4,13 +4,30 @@ class UserController {
     // Retrieves all users and renders a 'users.ejs' view
     async getUsers(req, res) {
         try {
-            const users = await userService.getUsers();
-            res.render('manageUsers', { users }); // Render users.ejs with users data
+            const search = req.query.search; // Get the search query
+            let users;
+
+            if (search) {
+                console.log(`Search term: ${search}`); // Debug search term
+                users = await userService.searchUsers(search);
+                console.log('Filtered users:', users); // Debug users returned
+            } else {
+                users = await userService.getUsers();
+                console.log('All users:', users); // Debug users returned
+            }
+
+            // Ensure res.render is only called once
+            res.render('manageUsers', { users, search }); // Pass users and search term
         } catch (error) {
             console.error('Error fetching users:', error);
-            res.render('error', { message: 'Internal server error' }); // Render error.ejs
+            res.render('error', { message: 'Internal server error' });
         }
     }
+
+
+
+
+
 
     // Retrieves a specific user by ID and renders the 'userProfile.ejs' view
     async getUserById(req, res) {
@@ -44,28 +61,25 @@ class UserController {
     // }
     async createUser(req, res) {
         try {
-            // Extract user data from the request body
-            const { username, password, email, first_name, last_name, type } = req.body;
+            const { username, password, email, first_name, last_name, type, isAdmin } = req.body;
 
             // Validate input
-            if (!username || !password || !email || !first_name || !last_name || !type) {
+            if (!username || !password || !email || !first_name || !last_name || (!type && isAdmin)) {
                 return res.status(400).render('error', { message: 'All fields are required.' });
             }
 
             // Call the service method to create a new user
-            await userService.createUser({
-                username,
-                password,
-                email,
-                first_name,
-                last_name,
-                type,
-            });
+            await userService.createUser({ username, password, email, first_name, last_name, type });
 
-            // Redirect to the login view after successful registration
-            res.render('login');
+            // Check if this is an admin registering a user or self-registration
+            if (isAdmin) {
+                // Admin registration redirects to manage users page
+                return res.redirect('/manageUsers');
+            }
+
+            // Regular user registration redirects to login page
+            res.render('login', { successMessage: 'Registration successful! Please log in.' });
         } catch (error) {
-            // Handle specific errors (e.g., duplicate username/email)
             if (error.message === 'Username or email already exists') {
                 return res.status(409).render('error', { message: error.message });
             }
@@ -78,35 +92,45 @@ class UserController {
 
 
 
+
     // Updates an existing user by ID and redirects to homepage
     async updateUser(req, res) {
         try {
             const id = parseInt(req.params.id, 10);
-            const success = await userService.updateUser(id, req.body);
-            if (!success) {
-                return res.render('error', { message: 'User not found or no changes made.' }); // Render error.ejs
+            const { username, email, first_name, last_name, type } = req.body; // Extract form data
+
+            if (!username || !email || !first_name || !last_name || !type) {
+                return res.status(400).render('error', { message: 'All fields are required.' });
             }
-            res.redirect('/'); // Redirect to homepage after update
+
+            const success = await userService.updateUser(id, { username, email, first_name, last_name, type });
+            if (!success) {
+                return res.status(404).render('error', { message: 'User not found or update failed.' });
+            }
+
+            res.redirect('/manageUsers'); // Redirect to the manage users page after successful update
         } catch (error) {
             console.error('Error updating user:', error);
-            res.render('error', { message: 'Internal server error' }); // Render error.ejs
+            res.status(500).render('error', { message: 'Internal server error' });
         }
     }
+
 
     // Deletes a user by ID and redirects to homepage
     async deleteUser(req, res) {
         try {
-            const id = parseInt(req.params.id, 10);
-            const success = await userService.deleteUser(id);
+            const id = parseInt(req.params.id, 10); // Get the user ID from the request parameters
+            const success = await userService.deleteUser(id); // Call the service to delete the user
             if (!success) {
-                return res.render('error', { message: 'User not found.' }); // Render error.ejs
+                return res.status(404).render('error', { message: 'User not found.' }); // Render an error if the user is not found
             }
-            res.redirect('/'); // Redirect to homepage after deletion
+            res.redirect('/manageUsers'); // Redirect to the Manage Users page after deletion
         } catch (error) {
             console.error('Error deleting user:', error);
-            res.render('error', { message: 'Internal server error' }); // Render error.ejs
+            res.status(500).render('error', { message: 'Internal server error' }); // Render an error for any internal issues
         }
     }
+
 
     // Renders the edit form for updating a specific user
     async editForm(req, res) {

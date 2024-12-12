@@ -6,7 +6,7 @@ const instructorService = require('../services/instructorService');
 // Define the InstructorController class to manage instructor operations.
 class InstructorController {
 
-    
+
     // Retrieves all instructors.
     async getInstructors(req, res) {
         try {
@@ -18,7 +18,7 @@ class InstructorController {
         }
     }
 
-    
+
     // Retrieves an instructor by their ID.
     async getInstructorById(req, res) {
         try {
@@ -31,7 +31,7 @@ class InstructorController {
         }
     }
 
-    
+
     // Creates a new instructor.
     async createInstructor(req, res) {
         try {
@@ -44,7 +44,7 @@ class InstructorController {
         }
     }
 
-    
+
     // Updates an existing instructor by ID.
     async updateInstructor(req, res) {
         try {
@@ -58,7 +58,7 @@ class InstructorController {
         }
     }
 
-    
+
     // Deletes an instructor by ID.
     async deleteInstructor(req, res) {
         try {

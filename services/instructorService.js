@@ -16,9 +16,18 @@ class InstructorService {
 
     // Fetches all instructors from the database.
     async getInstructors() {
-        const [rows] = await this.pool.query('SELECT * FROM instructors');
-        return rows.map(Instructor.fromRow);
+        const [rows] = await this.pool.query(`
+            SELECT 
+                instructor_id, 
+                instructor_name, 
+                instructor_user_id, 
+                instructor_bio, 
+                instructor_specialization 
+            FROM instructors
+        `);
+        return rows; // Return the rows directly with the desired field names
     }
+
 
     // Fetches an instructor by their ID.
     async getInstructorById(id) {
