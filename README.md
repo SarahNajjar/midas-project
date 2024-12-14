@@ -53,8 +53,8 @@ To run this project locally, ensure you have the following installed:
 
 ### Step 1: Clone the Repository
 ```bash
-git clone https://github.com/your-repo/digital-registration-system.git
-cd digital-registration-system
+git clone https://github.com/your-repo/digital-registration-system.git](https://github.com/SarahNajjar/midas-project.git
+cd midas-project
 ```
 
 ### Step 2: Install Dependencies
