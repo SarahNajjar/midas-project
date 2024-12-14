@@ -41,54 +41,30 @@ class PaymentController {
     // Fetch and render payments for a student
     async getStudentPayments(req, res) {
         try {
-            const studentId = parseInt(req.params.id, 10); // Get student ID from route parameters
-            console.log('hi');
+            const registrationId = parseInt(req.params.registration_id, 10); // Parse registration_id
+            console.log('Parsed registrationId:', registrationId);
 
-            // Call service to fetch payments
-            const payments = await paymentService.getPaymentsByStudentId(studentId);
-
-            if (payments && payments.length > 0) {
-                console.log(`Found ${payments.length} payments for student ID: ${studentId}`);
-                res.json({ success: true, payments }); // Send JSON response for testing
-                // res.render('payments', { payments: payments }); // Render payments view with the fetched data
-            } else {
-                console.log(`No payments found for student ID: ${studentId}`);
-                res.json({ success: false, message: 'No payments found for this student.' }); // Send JSON response for testing
-                // res.render('error', { message: 'No payments found for this student.' });
+            if (isNaN(registrationId)) {
+                console.error('Invalid registrationId:', req.params.registration_id);
+                return res.status(400).send({ message: 'Invalid registration ID provided.' });
             }
+
+            const payments = await paymentService.getPaymentsByRegistrationId(registrationId);
+            res.render('payments', { payments });
         } catch (error) {
-            console.error('Error fetching payments for student:', error);
-            res.json({ success: false, message: 'Internal server error while fetching payments.' }); // Send JSON response for testing
-            // res.render('error', { message: 'Internal server error while fetching payments.' });
+            console.error('Error fetching payments for registration:', error);
+            res.status(500).render('error', { message: 'Failed to fetch payments for the registration.' });
         }
     }
-
-
 
     // Creates a payment (Admin only)
     async createPayment(req, res) {
         try {
-            // Check if the user role is passed and is an admin
-            const user = req.body.user; // Assuming the user object is passed in the request body
-            if (!user || user.type !== 'admin') {
-                return res.render('error', { message: 'Access denied. Only admins can create payments.' });
-                // res.status(403).json({ message: 'Access denied. Only admins can create payments.' }); // Commented: For API usage
-            }
-
-            const { registration_id, amount, date, method, transaction_id } = req.body;
-
-            // Call the service to create the payment
-            await paymentService.createPayment({ registration_id, amount, date, method, transaction_id });
-
-            // Redirect to the payments list after successful creation
-            return res.redirect('/payments');
-            // res.status(201).json(newPayment); // Commented: Response as JSON for API
+            const payment = await paymentService.createPayment(req);
+            res.status(201).json({ message: 'Payment created successfully', payment });
         } catch (error) {
             console.error('Error creating payment:', error);
-
-            // Render error view with a friendly message
-            res.render('error', { message: 'Internal server error while creating payment.' });
-            // res.status(500).json({ message: 'Internal server error' }); // Commented: Response as JSON for API
+            res.status(400).json({ message: error.message });
         }
     }
 

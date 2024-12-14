@@ -157,13 +157,13 @@
                         value="<%= typeof search !== 'undefined' ? search : '' %>" required>
                     <button type="submit">Search</button>
                 </form>
+
             </div>
 
             <div class="add-user">
                 <a href="/api/users/addUser">Add New User</a>
             </div>
         </div>
-
         <div class="user-grid">
             <% if (users.length===0) { %>
                 <p style="text-align: center; color: #ff7675;">No users found for "<%= search %>".</p>
@@ -171,23 +171,23 @@
                     <% users.forEach(user=> { %>
                         <div class="user-card">
                             <div class="user-initial">
-                                <%= user.user_first_name ? user.user_first_name.charAt(0).toUpperCase() : '?' %>
+                                <%= user.first_name ? user.first_name.charAt(0).toUpperCase() : '?' %>
                             </div>
                             <div class="user-info">
                                 <h3>
-                                    <%= user.user_first_name || 'Unknown' %>
-                                        <%= user.user_last_name || '' %>
+                                    <%= user.first_name || 'Unknown' %>
+                                        <%= user.last_name || '' %>
                                 </h3>
                                 <p>
-                                    <%= user.user_email || 'No email provided' %>
+                                    <%= user.email || 'No email provided' %>
                                 </p>
                                 <p><strong>Role:</strong>
-                                    <%= user.user_type || 'N/A' %>
+                                    <%= user.type || 'N/A' %>
                                 </p>
                             </div>
                             <div class="user-actions">
-                                <a href="/api/users/edit-form/<%= user.user_id %>" class="edit">Edit</a>
-                                <a href="/api/users/delete/<%= user.user_id %>" class="delete">Delete</a>
+                                <a href="/api/users/edit-form/<%= user.id %>" class="edit">Edit</a>
+                                <a href="/api/users/delete/<%= user.id %>" class="delete">Delete</a>
                             </div>
                         </div>
                         <% }); %>

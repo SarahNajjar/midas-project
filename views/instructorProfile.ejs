@@ -121,7 +121,7 @@
                         <a class="nav-link" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/logout">Logout</a>
+                        <a class="nav-link" href="/login">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -150,15 +150,18 @@
             </p>
             <p><strong>Specialization:</strong> Guitar, Piano, Violin</p>
         </div>
-        <h2>Your Classes</h2>
-        <div class="profile-info">
-            <ul>
-                <li>Beginner Guitar - Mondays at 5 PM</li>
-                <li>Intermediate Piano - Wednesdays at 6 PM</li>
-                <li>Advanced Violin - Fridays at 7 PM</li>
-            </ul>
-        </div>
-        <a href="/createCourse" class="btn btn-primary">Create a New Course</a>
+        <p>Here are your courses:</p>
+        <ul>
+            <% if (courses && courses.length> 0) { %>
+                <% courses.forEach(course=> { %>
+                    <li>
+                        <%= course.name %> - <%= course.instrument %>
+                    </li>
+                    <% }) %>
+                        <% } else { %>
+                            <li>No courses found.</li>
+                            <% } %>
+        </ul>
     </div>
 
     <!-- Footer -->

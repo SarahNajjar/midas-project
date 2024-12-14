@@ -1,4 +1,3 @@
-// Import required modules
 const express = require('express');
 const dotenv = require('dotenv');
 const ejs = require('ejs');
@@ -26,47 +25,23 @@ app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
 // Routes for rendering views
-app.get('/', (req, res) => {
-    res.render('homePage'); // Render homepage
+app.get('/', (req, res) => res.render('homePage'));
+app.get('/login', (req, res) => res.render('login'));
+app.get('/studentProfile/:id', (req, res) => res.render('studentProfile'));
+app.get('/instructorProfile', (req, res) => res.render('instructorProfile'));
+app.get('/adminProfile', (req, res) => res.render('adminProfile'));
+app.get('/register', (req, res) => res.render('register'));
+app.get('/payments/:registration_id', (req, res) => {
+    res.render(`/api/payments/registrations/${req.params.registration_id}/payments`);
 });
 
-app.get('/login', (req, res) => {
-    res.render('login'); // Render login page
-});
+app.get('/availableCourses', (req, res) => res.render('availableCourses'));
+app.get('/manageCourses', (req, res) => res.render('manageCourses'));
+app.get('/manageUsers', (req, res) => res.render('manageUsers'));
+app.get('/analytics', (req, res) => res.render('analytics'));
+app.get('/registrations', (req, res) => res.render('registrations'));
 
-app.get('/studentProfile', (req, res) => {
-    res.render('studentProfile');
-});
-
-app.get('/instructorProfile', (req, res) => {
-    res.render('instructorProfile');
-});
-
-app.get('/adminProfile', (req, res) => {
-    res.render('adminProfile');
-});
-
-app.get('/register', (req, res) => {
-    res.render('register'); // Render register page
-});
-
-app.get('/payments', (req, res) => {
-    res.render('payments');
-});
-
-app.get('/courses', (req, res) => {
-    res.render('courses');
-});
-
-app.get('/courseDetails', (req, res) => {
-    res.render('courseDetails');
-});
-
-app.get('/manageUsers', (req, res) => {
-    res.redirect('api/users/manageUsers')
-})
-
-// User routes for handling API requests and other routes
+// Mount API routes
 app.use('/api/users', userRoutes);
 app.use('/api/courses', courseRoutes);
 app.use('/api/instructors', instructorRoutes);

@@ -1,5 +1,7 @@
 const userService = require('../services/userService');
-
+const courseService = require('../services/courseService');
+const instructorService = require('../services/instructorService');
+const registrationService = require('../services/instructorService');
 class UserController {
     // Retrieves all users and renders a 'users.ejs' view
     async getUsers(req, res) {
@@ -17,17 +19,12 @@ class UserController {
             }
 
             // Ensure res.render is only called once
-            res.render('manageUsers', { users, search }); // Pass users and search term
+            res.render('manageUsers', { users: users, search }); // Pass users and search term
         } catch (error) {
             console.error('Error fetching users:', error);
             res.render('error', { message: 'Internal server error' });
         }
     }
-
-
-
-
-
 
     // Retrieves a specific user by ID and renders the 'userProfile.ejs' view
     async getUserById(req, res) {
@@ -74,7 +71,7 @@ class UserController {
             // Check if this is an admin registering a user or self-registration
             if (isAdmin) {
                 // Admin registration redirects to manage users page
-                return res.redirect('/manageUsers');
+                return res.redirect('/api/users/manageUsers');
             }
 
             // Regular user registration redirects to login page
@@ -108,7 +105,7 @@ class UserController {
                 return res.status(404).render('error', { message: 'User not found or update failed.' });
             }
 
-            res.redirect('/manageUsers'); // Redirect to the manage users page after successful update
+            res.redirect('/api/users/manageUsers'); // Redirect to the manage users page after successful update
         } catch (error) {
             console.error('Error updating user:', error);
             res.status(500).render('error', { message: 'Internal server error' });
@@ -124,7 +121,7 @@ class UserController {
             if (!success) {
                 return res.status(404).render('error', { message: 'User not found.' }); // Render an error if the user is not found
             }
-            res.redirect('/manageUsers'); // Redirect to the Manage Users page after deletion
+            res.redirect('/api/users/manageUsers'); // Redirect to the Manage Users page after deletion
         } catch (error) {
             console.error('Error deleting user:', error);
             res.status(500).render('error', { message: 'Internal server error' }); // Render an error for any internal issues
@@ -210,7 +207,9 @@ class UserController {
                     res.render('adminProfile', { user: user }); // Render admin view
                 } else if (user.type === 'instructor') {
                     console.log("User is an instructor");
-                    res.render('instructorProfile', { user: user }); // Render instructor view
+                    const courses = await courseService.getCoursesByInstructorId(user.id);
+                    const instructor = await instructorService.getInstructorById(id);
+                    res.render('instructorProfile', { user: user, courses: courses, instructor: instructor });  // Render instructor view
                 } else if (user.type === 'student') {
                     console.log("User is a student");
                     res.render('studentProfile', { user: user }); // Render student view

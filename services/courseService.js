@@ -44,6 +44,15 @@ class CourseService {
         return Course.fromRow(rows[0]);
     }
 
+    async getCoursesByInstructorId(instructorId) {
+        const [rows] = await this.pool.query(
+            'SELECT courses.*, instructors.instructor_name FROM courses LEFT JOIN instructors ON courses.course_instructor_id = instructors.instructor_id WHERE instructor_id = ?',
+            [instructorId]
+        );
+
+        return rows.map(Course.fromRow);
+    }
+
     // Creates a new course in the database.
     async createCourse(courseData) {
         const { name, instrument, desc, duration, schedule, prerequisities, instructor_id } = courseData;

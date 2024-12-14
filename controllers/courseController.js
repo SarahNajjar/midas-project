@@ -8,6 +8,30 @@ class CourseController {
     // Retrieves all courses.
     async getCourses(req, res) {
         try {
+            const search = req.query.search;
+            const user_id = req.query.user_id; // Expect user_id as part of the query string
+
+            const courses = await courseService.getCourses(search);
+            const instructors = await instructorsService.getInstructors();
+
+            // Match instructor names with courses
+            courses.forEach(course => {
+                const instructor = instructors.find(
+                    instructor => instructor.instructor_id === course.instructor_id
+                );
+                course.instructor_name = instructor ? instructor.instructor_name : 'TBA';
+            });
+
+            res.render('availableCourses', { courses, search, user_id });
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+            res.status(500).render('error', { message: 'Internal server error' });
+        }
+    }
+
+
+    async getCoursesByAdmin(req, res) {
+        try {
             const search = req.query.search; // Get the search query
             const courses = await courseService.getCourses(search); // Pass the search term to the service
             const instructors = await instructorsService.getInstructors();
@@ -26,6 +50,7 @@ class CourseController {
             res.status(500).render('error', { message: 'Internal server error' });
         }
     }
+
 
     async addCourseForm(req, res) {
         try {
@@ -84,7 +109,7 @@ class CourseController {
             const courseId = parseInt(req.params.id, 10);
             await courseService.updateCourse(courseId, req.body);
             console.log("success")
-            res.redirect('/api/courses/manageCourses'); // Redirect back to manage courses after update
+            res.redirect('api/courses/manageCourses'); // Redirect back to manage courses after update
         } catch (error) {
             console.error('Error updating course:', error);
             res.status(500).render('error', { message: 'Internal server error.' });

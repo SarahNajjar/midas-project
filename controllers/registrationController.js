@@ -11,12 +11,14 @@ class RegistrationController {
     async getRegistrations(req, res) {
         try {
             const registrations = await registrationService.getRegistrations();
-            res.json(registrations);
+            //res.json(registrations);
+            res.render('registrations', { registrations });
         } catch (error) {
             console.error('Error fetching registrations:', error);
             res.status(500).json({ message: 'Internal server error' });
         }
     }
+
 
     async createRegistration(req, res) {
         try {
@@ -31,24 +33,25 @@ class RegistrationController {
             const newRegistration = await registrationService.createRegistration({
                 user_id,
                 course_id,
-                date, // Optional: Defaults handled in service
-                status, // Optional: Defaults handled in service
+                date: date || new Date().toISOString().split('T')[0], // Default to today's date
+                status: status || 'pending', // Default to 'pending'
             });
 
-            // Respond with the created registration
-            res.status(201).json(newRegistration);
+            // Redirect to studentProfile after successful registration
+            res.redirect(`/studentProfile?user_id=${user_id}`);
         } catch (error) {
             console.error('Error creating registration:', error);
 
             // Handle duplicate entry error
             if (error.message.includes('Duplicate entry')) {
-                return res.status(409).json({ message: 'You are already registered for this course' });
+                return res.status(409).render('error', { message: 'You are already registered for this course.' });
             }
 
             // Handle general errors
-            res.status(500).json({ message: 'Internal server error' });
+            res.status(500).render('error', { message: 'Internal server error' });
         }
     }
+
 
     async isUserEnrolled(req, res) {
         const { user_id, course_id } = req.query;

@@ -26,8 +26,13 @@ class PaymentService {
         return Payment.fromRow(rows[0]);
     }
 
-    async getPaymentsByStudentId(studentId) {
+    async getPaymentsByRegistrationId(registrationId) {
         try {
+            if (!registrationId || isNaN(registrationId)) {
+                console.error('Invalid registrationId in service:', registrationId);
+                throw new Error('Registration ID must be a valid number.');
+            }
+
             const query = `
                 SELECT 
                     p.payment_id, 
@@ -40,27 +45,54 @@ class PaymentService {
                 INNER JOIN 
                     registrations r ON p.payment_registration_id = r.registration_id
                 WHERE 
-                    r.registration_user_id = ?`;
+                    r.registration_id = ?`; // Use registration_id for filtering
 
-            const [results] = await this.pool.query(query, [studentId]); // Replace `this.pool` with your DB connection
+            console.log('Executing query with registrationId:', registrationId);
+
+            const [results] = await this.pool.query(query, [registrationId]);
             return results;
         } catch (error) {
             console.error('Database error while fetching payments:', error);
-            throw new Error('Failed to fetch payments for the student.');
+            throw new Error('Failed to fetch payments for the registration.');
         }
     }
 
 
+
     // Creates a new payment in the database.
     // Creates a new payment.
-    async createPayment(req, res) {
+    async createPayment(req) {
         try {
+            console.log('Request body:', req.body);
             const { registration_id, amount, date, method, transaction_id } = req.body;
-            const newPayment = await paymentService.createPayment({ registration_id, amount, date, method, transaction_id });
-            res.status(201).json(newPayment);
+
+            // Validate that all fields are present
+            if (!registration_id || !amount || !date || !method || !transaction_id) {
+                console.error('Missing required fields in request body:', req.body);
+                throw new Error('All payment fields are required.');
+            }
+
+            const query = `
+                INSERT INTO payments 
+                (payment_registration_id, payment_amount, payment_date, payment_method, payment_transaction_id) 
+                VALUES (?, ?, ?, ?, ?)`;
+
+            console.log('Executing query:', query);
+            console.log('Query parameters:', [registration_id, amount, date, method, transaction_id]);
+
+            const [result] = await this.pool.query(query, [
+                registration_id,
+                amount,
+                date,
+                method,
+                transaction_id,
+            ]);
+
+            console.log('Payment created successfully:', result);
+            return result;
         } catch (error) {
             console.error('Error creating payment:', error);
-            res.status(500).json({ message: 'Internal server error' });
+            throw new Error('Failed to create payment.');
         }
     }
 

@@ -11,7 +11,8 @@ class AdminActionController {
     async getAdminActions(req, res) {
         try {
             const actions = await adminActionService.getAdminActions();
-            res.json(actions);
+            //res.json(actions);
+            res.render('analytics', { actions });
         } catch (error) {
             console.error('Error fetching admin actions:', error);
             res.status(500).json({ message: 'Internal server error' });

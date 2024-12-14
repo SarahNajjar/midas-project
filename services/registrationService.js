@@ -15,8 +15,40 @@ class RegistrationService {
 
     // Fetches all registrations from the database.
     async getRegistrations() {
-        const [rows] = await this.pool.query('SELECT * FROM registrations');
-        return rows.map(Registration.fromRow);
+        try {
+            const query = `
+                SELECT 
+                    registrations.registration_id AS id,
+                    users.user_first_name AS user_name,
+                    users.user_last_name AS user_last_name,
+                    courses.course_name AS course_name,
+                    registrations.registration_date AS date,
+                    registrations.registration_status AS status
+                FROM 
+                    registrations
+                JOIN users ON registrations.registration_user_id = users.user_id
+                JOIN courses ON registrations.registration_course_id = courses.course_id
+            `;
+            const [rows] = await this.pool.query(query);
+            return rows;
+        } catch (error) {
+            console.error('Error fetching registrations:', error);
+            throw error;
+        }
+    }
+
+    async getRegistrationsByUserId(user_id) {
+        try {
+            const query = `
+                SELECT * 
+                FROM registrations
+                WHERE registration_user_id = ?`;
+            const [rows] = await this.pool.query(query, [user_id]);
+            return rows;
+        } catch (error) {
+            console.error('Error fetching registrations by user ID:', error);
+            throw error;
+        }
     }
 
     // Creates a new registration in the database.

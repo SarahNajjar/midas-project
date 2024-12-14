@@ -64,11 +64,9 @@
             color: #bdc3c7;
         }
 
-        .course-card a,
         .course-card button {
             display: block;
             text-align: center;
-            text-decoration: none;
             color: #fff;
             background: #00bfff;
             padding: 10px 15px;
@@ -81,10 +79,18 @@
             transition: background 0.3s ease, transform 0.3s ease;
         }
 
-        .course-card a:hover,
         .course-card button:hover {
             background: #008fd0;
             transform: scale(1.05);
+        }
+
+        .course-card .enrolled {
+            background: none;
+            color: #27ae60;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: default;
+            pointer-events: none;
         }
 
         .no-courses {
@@ -104,7 +110,7 @@
                 <% courses.forEach(course=> { %>
                     <li class="course-card">
                         <h2>
-                            <%= course.course_name %>
+                            <%= course.name %>
                         </h2>
                         <p><strong>Description:</strong>
                             <%= course.desc %>
@@ -113,12 +119,9 @@
                             <%= course.duration %> weeks
                         </p>
                         <p><strong>Instructor:</strong>
-                            <%= course.instructor_id || 'TBA' %>
+                            <%= course.instructor_name || 'TBA' %>
                         </p>
-                        <form action="/enroll" method="POST">
-                            <input type="hidden" name="courseId" value="<%= course.course_id %>" />
-                            <button type="submit">Enroll Now</button>
-                        </form>
+                        <button class="enroll-btn" onclick="enroll(this)">Enroll Now</button>
                     </li>
                     <% }); %>
             </ul>
@@ -126,6 +129,14 @@
                 <p class="no-courses">No courses available at the moment. Please check back later.</p>
                 <% } %>
     </div>
+
+    <script>
+        function enroll(button) {
+            // Change the button to a checkmark with "Enrolled"
+            button.textContent = "✔ Enrolled";
+            button.classList.add("enrolled");
+        }
+    </script>
 </body>
 
 </html>

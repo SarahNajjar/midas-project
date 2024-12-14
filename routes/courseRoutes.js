@@ -3,7 +3,7 @@ const router = express.Router();
 const courseController = require('../controllers/courseController');
 const { validateCourse, validateCourseId } = require('../validators/courseDTO');  // Import validators
 
-router.get('/manageCourses', (req, res) => courseController.getCourses(req, res));
+router.get('/manageCourses', (req, res) => courseController.getCoursesByAdmin(req, res));
 
 router.get('/edit-course/:id', validateCourseId, courseController.editCourseForm);
 // Route to display the Add Course form
@@ -16,7 +16,7 @@ router.post('/add-course', validateCourse, async (req, res) => courseController.
 router.post('/', validateCourse, courseController.createCourse);
 
 // Route to get all courses.
-router.get('/', (req, res) => courseController.getCourses(req, res));
+router.get('/availableCourses', (req, res) => courseController.getCourses(req, res));
 
 // Route to get a course by ID.
 router.get('/courseDetails/:id', validateCourseId, courseController.getCourseById);

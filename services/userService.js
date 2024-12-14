@@ -123,10 +123,14 @@ class UserService {
             SELECT * FROM users
             WHERE user_first_name LIKE ? OR user_last_name LIKE ?
         `;
-        const searchPattern = `${searchTerm}%`; // Match names starting with the search term
+        const searchPattern = `${searchTerm}%`;
         const [rows] = await this.pool.query(query, [searchPattern, searchPattern]);
-        return rows; // Return the filtered users
+        
+        // Convert each row to a User instance
+        return rows.map(User.fromRow);
     }
+    
+
 
 
 
