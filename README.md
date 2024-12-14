@@ -1,178 +1,120 @@
 # Digital Registration System for Music Education Institution
 
-## Introduction
+## Project Overview
 
-The Digital Registration System for the Music Institution Development Proposal (MIDAS) is designed to streamline the course registration process for music education. This system serves as a comprehensive platform that allows users to explore courses, register online, make secure payments, and manage their application statuses. Administrators can efficiently oversee all registrations, track key metrics, and communicate with students through an intuitive dashboard.
+The Digital Registration System for Music Education Institution is a full-stack web application designed to streamline course registration, user management, and payment tracking. It provides a user-friendly interface for students to explore courses, register, and manage payments. Additionally, administrators can efficiently manage users, courses, and notifications using an intuitive backend.
 
-This project demonstrates academic excellence by delivering a functional, web-based application that enhances user engagement and operational efficiency for music institutions.
+The project uses:
+- **Frontend**: HTML, CSS, JavaScript, EJS (Embedded JavaScript templates)
+- **Backend**: Node.js with Express.js
+- **Database**: MySQL
 
 ---
 
 ## Features
 
-### User Capabilities
-- **Browse Courses**: Explore a detailed catalog of courses categorized by instruments with information on course content, schedules, and instructors.
-- **Complete Online Registration**: Submit course registration forms online, providing necessary details and payment information.
-- **Track Application Status**: Monitor the progress of course applications in real time.
-- **Make Secure Payments**: Pay course fees through a secure payment gateway.
-- **Receive Automated Confirmation**: Get automated email confirmations upon successful registration.
+### Student Features
+- Browse and register for music courses.
+- Track registration status in real-time.
+- Make secure payments for enrolled courses.
+- View notifications and manage their student profile.
 
-### Admin Capabilities
-- **Manage Users**: Add, edit, and delete user accounts.
-- **Course Management**: Create, update, or delete course information.
-- **Track Registrations**: View and manage student registrations.
-- **Oversee Payments**: Monitor and manage payment transactions.
-- **Send Notifications**: Communicate with students through system notifications.
+### Admin Features
+- Manage users, courses, registrations, and payments.
+- Send system notifications to students and instructors.
+- Track administrative actions and generate reports.
 
 ---
 
-## Expected Outcome
-The system simplifies user interactions and administrative operations, leading to:
-- Enhanced user experience and satisfaction.
-- Increased efficiency in the enrollment process.
-- Reduced administrative overhead.
-- Improved tracking and management of institutional metrics.
-
----
-
-## Database Structure
-
-The system uses a relational database with the following tables:
-
-1. **Users Table**: Stores information about students and administrators.
-2. **Courses Table**: Contains details about the music courses offered.
-3. **Instructors Table**: Stores information about instructors.
-4. **Registrations Table**: Tracks student enrollments in courses.
-5. **Payments Table**: Handles payment transactions for registrations.
-6. **Admin Actions Table**: Logs administrative actions performed in the system.
-7. **Notifications Table**: Manages notifications sent to users.
-
-Refer to the detailed database structure in the [Database Structure](#database-structure) section.
-
----
-
-## Services
-
-### User Services
-- Fetch, create, update, and delete user accounts.
-- Authenticate users for secure login.
-
-### Course Services
-- Manage course details, schedules, and prerequisites.
-
-### Instructor Services
-- Maintain instructor profiles and expertise.
-
-### Registration Services
-- Record and update course registrations.
-
-### Payment Services
-- Process and track course fee payments.
-
-### Admin Action Services
-- Log and retrieve administrative actions.
-
-### Notification Services
-- Send and manage system notifications.
-
----
-
-## Client-Side Views
-
-The system includes the following client-side views:
-
-1. **Dashboard**: Displays an overview of courses, lessons, and announcements.
-2. **Profile**: Allows users to manage personal details and settings.
-3. **Course Catalog**: Provides a list of all available courses for browsing.
-4. **Instructor Profiles**: Displays instructor bios and specializations.
-5. **My Courses**: Shows a list of courses a student is enrolled in.
-6. **Class Schedule**: Displays the student's course schedule.
-7. **Registration**: Allows users to register for courses and check registration statuses.
-8. **Payments**: Shows payment history and allows for secure online transactions.
-9. **Notifications**: Displays course updates and other important alerts.
-10. **Admin Panel**: Grants administrators full access to manage the system.
-
----
-
-## Technology Stack
+## Technologies Used
 
 ### Frontend
-- **HTML/CSS/JavaScript**: For responsive and dynamic user interfaces.
-- **Frameworks**: Bootstrap or TailwindCSS for styling.
+- HTML5, CSS3, JavaScript
+- EJS for server-side rendering
 
 ### Backend
-- **Node.js/Express.js**: To handle server-side logic and API requests.
+- Node.js with Express.js
 
 ### Database
-- **MongoDB/MySQL**: To store and retrieve system data.
-
-### Other Tools
-- **Payment Gateway**: Integration with PayPal or Stripe for secure payments.
-- **Nodemailer**: For sending automated email notifications.
+- MySQL with normalized relational tables
 
 ---
 
-## Installation Instructions
+## Prerequisites
 
-### Prerequisites
-- Node.js (v14 or higher)
-- npm (Node Package Manager)
-- MongoDB/MySQL (depending on your chosen database)
-- Git
-
-### Steps to Run the Project Locally
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/your-repo/digital-registration-system.git
-   cd digital-registration-system
-   ```
-
-2. **Install Dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set Up Environment Variables**
-   Create a `.env` file in the project root and add the following:
-   ```
-   PORT=3000
-   DB_URI=mongodb://localhost:27017/midas
-   PAYMENT_GATEWAY_API_KEY=your_payment_gateway_api_key
-   ```
-
-4. **Start the Server**
-   ```bash
-   npm start
-   ```
-
-5. **Access the Application**
-   Open your browser and navigate to `http://localhost:3000`.
+To run this project locally, ensure you have the following installed:
+1. **Node.js** (v14 or higher)
+2. **npm** (Node Package Manager)
+3. **MySQL** (v8.0 or higher)
 
 ---
 
-## Usage Instructions
+## Installation
 
-1. **Admin**
-   - Log in to the admin panel to manage users, courses, registrations, and payments.
-   - View key metrics and send notifications to users.
+### Step 1: Clone the Repository
+```bash
+git clone https://github.com/your-repo/digital-registration-system.git
+cd digital-registration-system
+```
 
-2. **Students**
-   - Register an account to browse courses and enroll.
-   - Track registration status, manage personal schedules, and view notifications.
+### Step 2: Install Dependencies
+Install the required Node.js modules:
+```bash
+npm install
+```
+
+### Step 3: Configure the Environment Variables
+Create a `.env` file in the root directory and copy the following template:
+
+```env
+# APP CONFIGURATION
+PORT=3000  # The port on which the application will run.
+
+# DATABASE CONFIGURATION
+DB_HOST=127.0.0.1        # Host address for the database.
+DB_USER=root             # Database username.
+DB_PASS=root             # Password for the database user.
+DB_PORT=3307             # Port on which the database is running.
+DB_NAME=music_education_db  # Name of the database being used.
+```
+
+Ensure your MySQL server matches these configurations.
+
+### Step 4: Import the Database
+1. Open MySQL Workbench or any MySQL client.
+2. Create the database:
+   ```sql
+   CREATE DATABASE music_education_db;
+   ```
+3. Import the database structure and data:
+   ```bash
+   mysql -u root -p music_education_db < music_education_dump.sql
+   ```
+
+### Step 5: Start the Server
+Run the application in development mode:
+```bash
+npm run dev
+```
+
+Access the app at [http://localhost:3000](http://localhost:3000).
 
 ---
 
-## Project Directory Structure
+## Project Structure
 
 ```
 /project-root
 │
+├── /controllers            # Logic for handling routes
+├── /models                 # Database models
+├── /routes                 # API route definitions
+├── /views                  # EJS templates for frontend rendering
 ├── /public                 # Static files (CSS, images, JS)
-├── /views                  # EJS templates for frontend views
-├── /routes                 # Backend API routes
-├── /models                 # Database models (Users, Courses, etc.)
-├── /controllers            # Logic for handling requests
-├── server.js               # Main server file
+├── /middlewares            # Custom middleware
+├── .env                    # Environment variables
+├── server.js               # Main server entry point
+├── package.json            # Project metadata and scripts
 └── README.md               # Project documentation
 ```
 
@@ -180,33 +122,86 @@ The system includes the following client-side views:
 
 ## API Endpoints
 
-### User Endpoints
-- `GET /api/users` - Fetch all users.
-- `POST /api/users` - Create a new user.
+### Users API (`/api/users`)
+- `GET /manageUsers`: Fetch all users.
+- `POST /register`: Register a new user.
+- `POST /login`: Log in a user.
+- `GET /:id`: Get a user by ID.
+- `POST /update-user/:id`: Update a user.
+- `GET /delete/:id`: Delete a user.
 
-### Course Endpoints
-- `GET /api/courses` - Fetch all courses.
-- `POST /api/courses` - Create a new course.
+### Courses API (`/api/courses`)
+- `GET /availableCourses`: Fetch all available courses.
+- `POST /add-course`: Add a new course.
+- `GET /courseDetails/:id`: Fetch a course by ID.
+- `POST /update-course/:id`: Update a course.
+- `GET /delete-course/:id`: Delete a course.
 
-### Registration Endpoints
-- `POST /api/register` - Register for a course.
-- `GET /api/registrations` - Fetch all registrations.
+### Registrations API (`/api/registrations`)
+- `GET /`: Fetch all registrations.
+- `POST /`: Register a user for a course.
+- `GET /status`: Check registration status.
+- `POST /update`: Update a registration.
 
-### Payment Endpoints
-- `POST /api/payments` - Process a payment.
+### Payments API (`/api/payments`)
+- `GET /registrations/:registration_id/payments`: Fetch payments for a registration.
+- `POST /create`: Create a payment record.
+- `GET /delete/:id`: Delete a payment record.
+
+### Notifications API (`/api/notifications`)
+- `GET /:userId`: Fetch notifications for a user.
+- `POST /`: Create a notification.
+- `PUT /:notificationId/read`: Mark a notification as read.
+
+---
+
+## Running the Application
+
+### Development Mode
+Run the application with:
+```bash
+npm run dev
+```
+
+### Production Mode
+(Not configured yet, but typically use `npm start` after building static assets.)
+
+---
+
+## Troubleshooting
+
+1. **Database Connection Issues**
+   - Verify MySQL is running and matches `.env` configurations.
+   - Ensure the database dump is imported successfully.
+
+2. **Port Already in Use**
+   - Change the `PORT` value in the `.env` file if port 3000 is occupied.
+
+3. **Dependency Issues**
+   - Reinstall dependencies:
+     ```bash
+     npm install
+     ```
+
+4. **Invalid Environment Configuration**
+   - Double-check `.env` syntax and ensure all keys are defined.
+
+---
+
+## Sample Data
+
+The database includes the following sample data:
+- **Users**: Example students, instructors, and admins.
+- **Courses**: Preloaded music courses like "Jazz Improvisation Workshop" and "Music Theory Basics."
+- **Registrations**: Sample student registrations.
 
 ---
 
 ## Future Enhancements
 
-- Mobile App for students and administrators.
-- Advanced analytics for admin metrics.
-- Support for live video lessons or online classes.
+1. Add JWT-based authentication for secure user sessions.
+2. Integrate third-party payment gateways (e.g., Stripe or PayPal).
+3. Build RESTful APIs for mobile and third-party integrations.
 
 ---
 
-## Conclusion
-
-The Digital Registration System for Music Education Institution provides an intuitive and efficient platform for managing course registrations and payments. By streamlining processes, it improves user experience and boosts the operational efficiency of the institution.
-
----
